@@ -1,0 +1,27 @@
+# Custom OTA-capable partition table for this board's 16MB flash.
+#
+# The project previously used the stock "huge_app.csv" scheme (Waveshare's
+# own recommended Arduino IDE setting for this board: "Huge App (3MB No
+# OTA/1MB SPIFFS)") -- but as the name says, that scheme has exactly ONE
+# app partition and no ota_0/ota_1 slots at all, so ArduinoOTA has nowhere
+# to write a new firmware image while the old one is still running. The
+# built-in partition schemes that DO have OTA slots (e.g. "default.csv",
+# "min_spiffs.csv") assume a 4MB flash chip and size each OTA app slot at
+# only ~1.9MB, which is tight for an image built with Arduino_GFX + custom
+# fonts + NimBLE + WiFi/ArduinoOTA.
+#
+# This board actually has 16MB of flash (board_build.flash_size /
+# board_upload.flash_size in platformio.ini), so instead of squeezing into
+# a 4MB-oriented table, this gives each OTA app slot a generous 3MB (the
+# firmware image measured well under 1MB before WiFi/OTA were added, so
+# 3MB leaves a lot of headroom for it to grow) and still leaves ~9.8MB
+# free as a spiffs data partition for later use (this firmware doesn't
+# currently use a filesystem itself).
+#
+# Name,     Type, SubType,   Offset,   Size,      Flags
+nvs,        data, nvs,       0x9000,   0x5000,
+otadata,    data, ota,       0xe000,   0x2000,
+app0,       app,  ota_0,     0x10000,  0x300000,
+app1,       app,  ota_1,     0x310000, 0x300000,
+spiffs,     data, spiffs,    0x610000, 0x9E0000,
+coredump,   data, coredump,  0xFF0000, 0x10000,

@@ -1,0 +1,29 @@
+.pio
+.cache
+.dummy
+.vscode/.browse.c_cpp.db*
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/ipch
+compile_commands.json
+
+# Real WiFi/OTA credentials -- never commit these. Copy
+# src/wifi_secrets.h.example to src/wifi_secrets.h and fill in your own.
+src/wifi_secrets.h
+
+# macOS Finder metadata
+.DS_Store
+
+# Build output -- OTA release binaries are build artifacts, not source.
+# Distribute them via GitHub Releases (or keep using the existing
+# Cloudflare Worker OTA host) instead of committing every historical .bin.
+dist/
+
+# Stray backup file, empty, not real credentials -- excluded anyway out of caution
+src/wifi_secrets.h.bak
+
+# Stale nested duplicate of this same project (not the active one -- the
+# active source is the root-level src/ and include/ next to this file's own
+# platformio.ini). Left in place on disk; just not part of what gets
+# published.
+voltra-knob-controller/
